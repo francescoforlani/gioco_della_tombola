@@ -1,9 +1,10 @@
 1- Specifica del progetto "Gioco della tombola"
+
 2- Modalità di esecuzione della versione attuale
 
 
 
-1-Specifica del progetto "Gioco della tombola"
+# 1-Specifica del progetto "Gioco della tombola"
 
 Il programma deve implementare il gioco della tombola.
 
@@ -48,7 +49,7 @@ Premere `return` per estrarre un numero. Dopo ogni numero viene visualizzato il 
 
 
 
-2-Modalità di esecuzione della versione corrente
+# 2-Modalità di esecuzione della versione corrente
 
 
 
