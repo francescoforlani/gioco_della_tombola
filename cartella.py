@@ -25,10 +25,7 @@ class cartella:
         numeri_nona_colonna = list(range(80,91))
         
         numeri_da_mettere = list(range(1,91))
-        
-        self.caselle = 
-        
-    def controlla_premi()
+
         
     
     

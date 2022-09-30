@@ -16,7 +16,7 @@ from busta import busta
 from giocatore import giocatore
 
 
-<<<<<<< HEAD
+
 
 #inserisci numero giocatori (int<10)
 numero_giocatori = int(input("Ciao! Inserisci il numero di giocatori (numero intero, esempio: 2): "))
@@ -88,7 +88,5 @@ busta = busta
 
 #inizia l'estrazione dei numeri e il controllo delle cartelle man mano che escono i numeri
 
-=======
-print('let's goooo')
->>>>>>> bc099ae2f63af396545401baa7564fe50d95cacc
+
 
