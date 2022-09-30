@@ -53,11 +53,7 @@ Premere `return` per estrarre un numero. Dopo ogni numero viene visualizzato il 
 
 Per giocare digitare da linea di comando:
 
-<<<<<<< HEAD
 tombola.py
-=======
-> tombola.py
->>>>>>> bea61c7e412bbdb5a5ea7d3010af8287daa1245c
 
 e seguire le istruzioni.
 
