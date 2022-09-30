@@ -51,6 +51,10 @@ Premere `return` per estrarre un numero. Dopo ogni numero viene visualizzato il 
 
 # 2-Modalità di esecuzione della versione corrente
 
+Per giocare digitare da linea di comando:
 
+tombola.py
+
+e seguire le istruzioni.
 
 
