@@ -9,6 +9,7 @@ Created on Thu Sep 22 17:25:19 2022
 
 import sys
 import random
+import numpy as np
 
 from busta import busta
 #from Tabellone import Tabellone
@@ -25,13 +26,13 @@ if numero_giocatori > 10:
     sys.exit()
 
 #inserisci nomi dei giocatori (lista) e controlla di ricevere tanti nomi quanti sono i giocatori
-nomi_giocatori = input("Ok siete in {numero_giocatori} giocatori. Inserisci i vostri nomi (esempio: Francesco Orlando): ")
+nomi_giocatori = input(f"Ok siete in {numero_giocatori} giocatori. Inserisci i vostri nomi (esempio: Francesco Orlando): ")
 nomi_giocatori = nomi_giocatori.split()
 for i in range(len(nomi_giocatori)):
     nomi_giocatori[i] = str(nomi_giocatori[i])
     
 if len(nomi_giocatori) != numero_giocatori:
-    print(f'Il numero di giocatori non corrisponde alla lunghezza della lista dei nomi.')
+    print('Il numero di giocatori non corrisponde alla lunghezza della lista dei nomi.')
     sys.exit()
 
 #inserisci il numero di cartelle per ogni giocatore (max 6) e controlla di ricevere tanti valori 
@@ -76,17 +77,65 @@ lista_cartelle_di_prova = [cartella_di_prova_1, cartella_di_prova_2,
                            cartella_di_prova_3, cartella_di_prova_4,
                            cartella_di_prova_5, cartella_di_prova_6]
 
+lista_giocatori = []
 for i in range(len(nomi_giocatori)):
     globals()["giocatore_"+str(i+1)] = giocatore(f"{nomi_giocatori[i]}", 
                                                  random.sample(lista_cartelle_di_prova, 
                                                                cartelle_per_giocatore[i]))
+    lista_giocatori.append(globals()["giocatore_"+str(i+1)])
     print("Ecco le cartelle per ogni giocatore:")
     print(vars(globals()["giocatore_"+str(i+1)]))
     
 #crea l'oggetto busta da cui estrarre i numeri
-busta = busta
+busta = busta()
 
 #inizia l'estrazione dei numeri e il controllo delle cartelle man mano che escono i numeri
+def copri_numero(cartella, numero_estratto): #dato il numero estratto verifico se ho vinto qualcosa
+    cartella_array = np.array(cartella)
+    if numero_estratto not in cartella_array:
+        risultato = "non c'è"
+    else:
+        i, j = np.where(cartella_array == numero_estratto)  # posizione del numero
+        cartella_array[i, j] = -1  # segna che il numero è stato estratto
+        cartella = cartella_array.tolist()
+        risultato_riga = (cartella_array[i] <0).sum()
+        risultato_cartella = (cartella_array <0).sum()
+        if risultato_cartella == 15:
+            risultato = 'tombola'
+        elif risultato_riga == 5:
+            risultato = 'cinquina'
+        elif risultato_riga == 4:
+            risultato = 'quaterna'
+        elif risultato_riga == 3:
+            risultato = 'terna'
+        elif risultato_riga == 2:
+            risultato = 'ambo'
+        else:
+            risultato = 'niente'
+    return risultato, cartella
 
 
+print("Iniziamo. Premi INVIO per estrarre un numero.")
+while True:
+    input("")
+    numero_estratto = busta.estraggo()
+    print(f"il numero estratto è {numero_estratto}")
+        
+    #aggiorna le cartelle dei giocatori
+    lista_risultati_del_turno = []
+    for giocatore in lista_giocatori:
+        for index in range(len(giocatore.cartelle)):
+            risultato, giocatore.cartelle[index] = copri_numero(giocatore.cartelle[index], numero_estratto)
+            lista_risultati_del_turno.append(risultato)
+            print(f"{giocatore.nome} ha fatto {risultato} nella cartella {index+1}")
+            
+
+    # se qualcuno ha fatto tombola termina il gioco
+    exist_count = lista_risultati_del_turno.count("tombola")
+    if exist_count > 0: 
+        print("")
+        print("E' stata fatta tombola. Fine del gioco.")
+        sys.exit()
+        
+    print("Premi INVIO per estrarre un nuovo numero.")
 

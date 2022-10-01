@@ -13,3 +13,5 @@ class giocatore:
         
     def get_giocatore(self):
         print(f"{self.nome} {self.cartelle}")
+        
+   
