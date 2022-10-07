@@ -12,8 +12,7 @@ import random
 import numpy as np
 
 from busta import busta
-#from Tabellone import Tabellone
-#from Cartelle import Gruppo_cartelle
+from cartella import gruppo_di_cartelle
 from giocatore import giocatore
 
 
@@ -50,37 +49,38 @@ for i in range(len(cartelle_per_giocatore)):
         sys.exit()
         
 #assegna le cartelle ad ogni giocatore in modo randomico
-cartella_di_prova_1 = [[0, 16, 21, 31, 42, 0, 60, 0, 0],
-                     [1, 18, 0, 33, 0, 53, 62, 0, 0],
-                     [2, 0, 0, 38, 0, 55, 0, 74, 90]]
+# cartella_di_prova_1 = [[0, 16, 21, 31, 42, 0, 60, 0, 0],
+#                      [1, 18, 0, 33, 0, 53, 62, 0, 0],
+#                      [2, 0, 0, 38, 0, 55, 0, 74, 90]]
 
-cartella_di_prova_2 = [[0, 17, 24, 31, 41, 51, 0, 0, 0],
-                       [2, 0, 25, 0, 43, 0, 0, 70, 81],
-                       [0, 0, 0, 36, 44, 52, 63, 0, 85]]
+# cartella_di_prova_2 = [[0, 17, 24, 31, 41, 51, 0, 0, 0],
+#                        [2, 0, 25, 0, 43, 0, 0, 70, 81],
+#                        [0, 0, 0, 36, 44, 52, 63, 0, 85]]
 
-cartella_di_prova_3 = [[0, 11, 24, 35, 41, 51, 0, 0, 0],
-                       [2, 0, 25, 0, 42, 0, 0, 70, 81],
-                       [0, 0, 0, 36, 44, 52, 67, 0, 85]]
+# cartella_di_prova_3 = [[0, 11, 24, 35, 41, 51, 0, 0, 0],
+#                        [2, 0, 25, 0, 42, 0, 0, 70, 81],
+#                        [0, 0, 0, 36, 44, 52, 67, 0, 85]]
 
-cartella_di_prova_4 = [[0, 17, 24, 31, 41, 55, 0, 0, 0],
-                       [2, 0, 28, 0, 43, 0, 0, 70, 81],
-                       [0, 0, 0, 36, 44, 59, 63, 0, 85]]
-cartella_di_prova_5 = [[0, 13, 21, 31, 42, 0, 60, 0, 0],
-                     [1, 19, 0, 33, 0, 53, 64, 0, 0],
-                     [2, 0, 0, 38, 0, 59, 0, 74, 90]]
+# cartella_di_prova_4 = [[0, 17, 24, 31, 41, 55, 0, 0, 0],
+#                        [2, 0, 28, 0, 43, 0, 0, 70, 81],
+#                        [0, 0, 0, 36, 44, 59, 63, 0, 85]]
+# cartella_di_prova_5 = [[0, 13, 21, 31, 42, 0, 60, 0, 0],
+#                      [1, 19, 0, 33, 0, 53, 64, 0, 0],
+#                      [2, 0, 0, 38, 0, 59, 0, 74, 90]]
 
-cartella_di_prova_6 = [[0, 17, 21, 33, 41, 51, 0, 0, 0],
-                       [2, 0, 25, 0, 43, 0, 0, 76, 81],
-                       [0, 0, 0, 38, 44, 52, 63, 0, 87]]
+# cartella_di_prova_6 = [[0, 17, 21, 33, 41, 51, 0, 0, 0],
+#                        [2, 0, 25, 0, 43, 0, 0, 76, 81],
+#                        [0, 0, 0, 38, 44, 52, 63, 0, 87]]
 
-lista_cartelle_di_prova = [cartella_di_prova_1, cartella_di_prova_2, 
-                           cartella_di_prova_3, cartella_di_prova_4,
-                           cartella_di_prova_5, cartella_di_prova_6]
+# lista_cartelle_di_prova = [cartella_di_prova_1, cartella_di_prova_2, 
+#                            cartella_di_prova_3, cartella_di_prova_4,
+#                            cartella_di_prova_5, cartella_di_prova_6]
 
 lista_giocatori = []
 for i in range(len(nomi_giocatori)):
+    gruppo_cartelle = gruppo_di_cartelle()
     globals()["giocatore_"+str(i+1)] = giocatore(f"{nomi_giocatori[i]}", 
-                                                 random.sample(lista_cartelle_di_prova, 
+                                                 random.sample(gruppo_cartelle.crea_gruppo_cartelle(), 
                                                                cartelle_per_giocatore[i]))
     lista_giocatori.append(globals()["giocatore_"+str(i+1)])
     print("Ecco le cartelle per ogni giocatore:")
@@ -90,31 +90,6 @@ for i in range(len(nomi_giocatori)):
 busta = busta()
 
 #inizia l'estrazione dei numeri e il controllo delle cartelle man mano che escono i numeri
-def copri_numero(cartella, numero_estratto): #dato il numero estratto verifico se ho vinto qualcosa
-    cartella_array = np.array(cartella)
-    if numero_estratto not in cartella_array:
-        risultato = "non c'è"
-    else:
-        i, j = np.where(cartella_array == numero_estratto)  # posizione del numero
-        cartella_array[i, j] = -1  # segna che il numero è stato estratto
-        cartella = cartella_array.tolist()
-        risultato_riga = (cartella_array[i] <0).sum()
-        risultato_cartella = (cartella_array <0).sum()
-        if risultato_cartella == 15:
-            risultato = 'tombola'
-        elif risultato_riga == 5:
-            risultato = 'cinquina'
-        elif risultato_riga == 4:
-            risultato = 'quaterna'
-        elif risultato_riga == 3:
-            risultato = 'terna'
-        elif risultato_riga == 2:
-            risultato = 'ambo'
-        else:
-            risultato = 'niente'
-    return risultato, cartella
-
-
 print("Iniziamo. Premi INVIO per estrarre un numero.")
 while True:
     input("")
@@ -125,7 +100,7 @@ while True:
     lista_risultati_del_turno = []
     for giocatore in lista_giocatori:
         for index in range(len(giocatore.cartelle)):
-            risultato, giocatore.cartelle[index] = copri_numero(giocatore.cartelle[index], numero_estratto)
+            risultato, giocatore.cartelle[index] = giocatore.copri_numero(giocatore.cartelle[index], numero_estratto)
             lista_risultati_del_turno.append(risultato)
             print(f"{giocatore.nome} ha fatto {risultato} nella cartella {index+1}")
             
