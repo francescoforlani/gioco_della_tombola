@@ -1,7 +1,3 @@
-1- Specifica del progetto "Gioco della tombola"
-
-2- Modalità di esecuzione della versione attuale
-
 
 
 # 1-Specifica del progetto "Gioco della tombola"
@@ -32,28 +28,7 @@ Un gruppo di 6 cartelle deve verificare le seguenti condizioni:
 
 Per giocare digitare da linea di comando:
 
-> `python tombola.py -g numero_giocatori -n lista_numero_di_cartelle_per_giocatore`
-
-Ad esempio il comando:
-
-> `python tombola.py -g 3 -n 3 6 4`
-
-Avvia il gioco con 3 giocatori che hanno rispettivamente 3, 6 e 4 cartelle.
-
-Per elencare tutte le opzioni possibili digitare:
-
-> `python tombola.py -h`
-
-Premere `return` per estrarre un numero. Dopo ogni numero viene visualizzato il corrispondente risultato per ciascun giocatore.
-
-
-
-
-# 2-Modalità di esecuzione della versione corrente
-
-Per giocare digitare da linea di comando:
-
-tombola.py
+> python tombola.py 
 
 e seguire le istruzioni.
 

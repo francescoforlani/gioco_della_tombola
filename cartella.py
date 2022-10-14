@@ -7,6 +7,7 @@ Created on Thu Sep 29 18:28:57 2022
 
 import numpy as np
 import random
+import sys
 
 class gruppo_di_cartelle:
     
@@ -14,6 +15,12 @@ class gruppo_di_cartelle:
         self.numero_cartelle = numero_cartelle
         
     def crea_gruppo_cartelle(self):
+        # La creazione di 6 cartelle diverse avviene in 5 passaggi:
+            
+        # 1) Creo 9 intervalli, i numeri di ogni intervallo potranno essere messi all'interno
+        # di una precisa colonna delle cartelle. Ad esempio i numeri dell'intervallo che
+        # va da 1 a 9 potranno essere inseriti solo nella prima colonna delle cartelle.
+        # C'è quindi una corrispondenza tra intervallo e colonna.
         
         intervallo_colonna_1 = list(range(1, 10))
         intervallo_colonna_2 = list(range(10, 20))
@@ -33,7 +40,9 @@ class gruppo_di_cartelle:
         
         numeri_cartelle = []
         
-        #assegno ad ogni cartella un numero per ogni colonna
+        # 2) Assegno ad ogni cartella un numero per ogni intervallo.
+        # Dopo questo passaggio le cartelle hanno preso un numero da ogni intervallo.
+        
         #for i in range(1, self.numero_cartelle + 1):
         for i in range(1, 7):
             numeri_cartella = []
@@ -45,7 +54,10 @@ class gruppo_di_cartelle:
                 
             numeri_cartelle.append(numeri_cartella)
                 
-        #assegno ad ogni cartella altri 3 numeri in colonne diverse
+        # 3) Assegno randomicamente ad ogni cartella altri 3 numeri facenti parte di 
+        # intervalli diversi. Dopo questo passaggio le cartelle hanno preso almeno un numero
+        # da ogni intervallo e due numeri da tre intervalli.
+        
         #for i in range(1, self.numero_cartelle + 1):
         for i in range(0, 6):
             numeri_cartella = []
@@ -67,28 +79,56 @@ class gruppo_di_cartelle:
                 
             numeri_cartelle[i].sort()
                 
-        #assegno ad ogni cartella gli ultimi 3 numeri in colonne diverse.
-        #Devo far sì che per ogni cartella restino 3 intervalli diversi da poter scegliere 
-        #altrimenti potrei ottenere una cartella con più di 3 numeri su una colonna (dove
-        #il massimo è 3)
+        # 4) Assegno randomicamente ad ogni cartella gli ultimi 3 numeri da intervalli diversi.
+        # Rimangono da assegnare 18 numeri che sono divisi in 6 o più intervalli.
+        # Devo far sì che per ogni cartella restino almeno 3 intervalli diversi da poter scegliere 
+        # altrimenti, se prendessi 2 numeri dallo stesso intervallo potrei ottenere una cartella con 
+        # più di 3 numeri su una colonna (quando il massimo consentito è 3).
+        # Per fare ciò, per ogni cartella prendo 3 numeri dai 3 intervalli con più numeri rimasti,
+        # fino a quando rimarranno soltanto 3 numeri in 3 intervalli diversi, che verranno 
+        # assegnati all'ultima cartella delle 6.
+        # Dopo questo passaggio le cartelle hanno da 1 a 3 numeri per intervallo, per un totale
+        # di 15 numeri a cartella.
+        
         for i in range(0,6):
             numeri_cartella = []
             lista_indici_presi = [100] #numero a caso per non far restituire errore
             #for iterazione in range(0,3):
             numeri_presi = 1
-            while numeri_presi < 4:
+            while numeri_presi < 4: 
                 lunghezza_intervalli = []
                 for intervallo in lista_intervalli:
                     lunghezza_intervalli.append(len(intervallo))
-                max_len = max(lunghezza_intervalli)
+                max_len = max(lunghezza_intervalli)                
                 second_max_len = sorted(lunghezza_intervalli)[-2]
                 third_max_len = sorted(lunghezza_intervalli)[-3]
-                max_index = lunghezza_intervalli.index(max_len)
-                second_max_index = lunghezza_intervalli.index(second_max_len)
-                third_max_index = lunghezza_intervalli.index(third_max_len)
+                fourth_max_len = sorted(lunghezza_intervalli)[-4]
+                fifth_max_len = sorted(lunghezza_intervalli)[-5]
+                sixth_max_len = sorted(lunghezza_intervalli)[-6]
                 
-                if max_index not in lista_indici_presi: #evito che prenda un numero
-                                                                   #dallo stesso intervallo di prima
+                max_index = lunghezza_intervalli.index(max_len)
+                lunghezza_intervalli[max_index] = lunghezza_intervalli[max_index] + 0.9
+                
+                second_max_index = lunghezza_intervalli.index(second_max_len)
+                lunghezza_intervalli[second_max_index] = lunghezza_intervalli[second_max_index] + 0.8
+                
+                third_max_index = lunghezza_intervalli.index(third_max_len)
+                lunghezza_intervalli[third_max_index] = lunghezza_intervalli[third_max_index] + 0.7
+                
+                fourth_max_index = lunghezza_intervalli.index(fourth_max_len)
+                lunghezza_intervalli[fourth_max_index] = lunghezza_intervalli[fourth_max_index] + 0.6
+                
+                fifth_max_index = lunghezza_intervalli.index(fifth_max_len)
+                lunghezza_intervalli[fifth_max_index] = lunghezza_intervalli[fifth_max_index] + 0.5
+                
+                sixth_max_index = lunghezza_intervalli.index(sixth_max_len)
+                lunghezza_intervalli[sixth_max_index] = lunghezza_intervalli[sixth_max_index] + 0.4
+                
+                # Evito che la cartella prenda un numero dallo stesso intervallo di prima
+                # tenendo traccia degli intervalli che sono già stati "saccheggiati" di un
+                # numero dalla cartella in questione:
+                
+                if max_index not in lista_indici_presi: 
                     n = random.choice(lista_intervalli[max_index])
                     numeri_cartella.append(n)
                     lista_intervalli[max_index].remove(n)
@@ -109,6 +149,30 @@ class gruppo_di_cartelle:
                     numeri_rimasti.remove(n)
                     numeri_presi += 1
                     lista_indici_presi.append(third_max_index)
+                elif fourth_max_index not in lista_indici_presi:
+                    n = random.choice(lista_intervalli[fourth_max_index])
+                    numeri_cartella.append(n)
+                    lista_intervalli[fourth_max_index].remove(n)
+                    numeri_rimasti.remove(n)
+                    numeri_presi += 1
+                    lista_indici_presi.append(fourth_max_index)
+                elif fifth_max_index not in lista_indici_presi:
+                    n = random.choice(lista_intervalli[fifth_max_index])
+                    numeri_cartella.append(n)
+                    lista_intervalli[fifth_max_index].remove(n)
+                    numeri_rimasti.remove(n)
+                    numeri_presi += 1
+                    lista_indici_presi.append(fifth_max_index)
+                elif sixth_max_index not in lista_indici_presi:
+                    n = random.choice(lista_intervalli[sixth_max_index])
+                    numeri_cartella.append(n)
+                    lista_intervalli[sixth_max_index].remove(n)
+                    numeri_rimasti.remove(n)
+                    numeri_presi += 1
+                    lista_indici_presi.append(sixth_max_index)
+                else:
+                    print("errore nel consegnare le cartelle") 
+                    sys.exit()
                 
         
             for numero in numeri_cartella:
@@ -116,8 +180,16 @@ class gruppo_di_cartelle:
                 
             numeri_cartelle[i].sort()
        
-        #adesso ho 15 numeri per ogni cartella e devo distribuirli in modo che ce ne
-        #siano 5 per riga e da 1 a 3 per ogni colonna
+        # 5) Adesso le nostre cartelle sono delle semplici liste contenenti ognuna 15 numeri.
+        # Per prima cosa rendo la cartella una matrice 3x9 e poi distribuisco al suo interno
+        # i 15 numeri, rispettando la corrispondenza tra l'intervallo da cui è stato preso 
+        # ogni numero e la rispettiva colonna in cui dovrà stare. Ad esempio il numero 22 
+        # dovrà per forza stare nella terza colonna della cartella.
+        # Inoltre, devo distribuirli in modo che ce ne siano 5 per riga. (Il vincolo 
+        # "minimo 1 numero per colonna e massimo 3 numeri per colonna" è stato già rispettato
+        # in quanto sono stati presi da 1 a 3 numeri per intervallo.)
+        # Dopo questo passaggio ottengo finalmente 6 cartelle rispettanti i vincoli dati.
+
         list_of_element_per_row = []
         gruppo_cartelle = []
         for lista_di_numeri in numeri_cartelle:
