@@ -10,8 +10,9 @@ Created on Thu Sep 22 17:25:19 2022
 import sys
 import random
 from busta import busta
-from cartella import gruppo_di_cartelle
+from gruppo_cartelle import gruppo_di_cartelle
 from giocatore import giocatore
+from cartella import Cartella
 
 
 
@@ -71,9 +72,10 @@ while True:
     lista_risultati_del_turno = []
     for giocatore in lista_giocatori:
         for index in range(len(giocatore.cartelle)):
-            risultato, giocatore.cartelle[index] = giocatore.copri_numero(giocatore.cartelle[index], numero_estratto)
+            risultato = giocatore.cartelle[index].copri_numero(numero_estratto)
             lista_risultati_del_turno.append(risultato)
-            print(f"{giocatore.nome} ha fatto {risultato} nella cartella {index+1}")
+            if risultato != "niente":
+                print(f"{giocatore.nome} ha fatto {risultato} nella cartella {index+1}")
             
 
     # se qualcuno ha fatto tombola termina il gioco
