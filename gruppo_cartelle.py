@@ -161,7 +161,7 @@ class gruppo_di_cartelle:
             numeri_cartelle[i].sort() # metto i numeri di ogni cartella in ordine crescente
        
         # 5) Adesso le nostre cartelle sono delle semplici liste contenenti ognuna 15 numeri.
-        # Per prima cosa rendo ognuna di queste liste un oggetto di tipo cartella e poi distribuisco al suo interno
+        # Per prima cosa creo un oggetto di tipo cartella e poi distribuisco al suo interno
         # i 15 numeri, rispettando la corrispondenza tra l'intervallo da cui è stato preso 
         # ogni numero e la rispettiva colonna in cui dovrà stare. Ad esempio il numero 22 
         # dovrà per forza stare nella terza colonna della cartella.
@@ -171,41 +171,40 @@ class gruppo_di_cartelle:
         # Dopo questo passaggio ottengo finalmente 6 cartelle rispettanti i vincoli dati.  
 
 
-            def posiziona_numero(contatore, cartella, n = int):
-                # Funzione che prende in ingresso:
-                # - un numero;
-                # - un oggetto di tipo cartella (matrice 3x9) in cui dovrò inserire il numero secondo determinate condizioni;
-                # - il contatore che mi serve per misurare quanti numeri ho messo in ogni riga della cartella;
-                # Restituisce il contatore aggiornato.
-                lista_condizioni = [n in range(0,10), n in range(10,20), n in range(20,30), n in range(30,40), n in range(40,50),
-                                    n in range(50,60), n in range(60,70), n in range(70,80), n in range(80,90)] # Queste sono le 9 condizioni 
-                                                                                                                # relative alle 9 colonne della 
-                                                                                                                # cartella.
-                for condizione in lista_condizioni: # Scorro le 9 condizioni                 
-                    if condizione: # Quando la condizione è soddisfatta allora procedo ad inserire il numero in quella colonna
-                        indice_condizione = lista_condizioni.index(condizione) # Prendo l'indice della condizione che corrisponde alla colonna 
-                                                                               # della cartella in cui dovrò inserire il numero
-                        for row in range(0,3): # Scorro le 3 righe della colonna
-                            condition_2 = contatore[row+1] >= contatore[row+2] <= contatore[row+3] and contatore[row] >= contatore[row+2] <= contatore[row+4]
-                            # Questa seconda condizione è vera se la riga che prendo in considerazione ha meno numeri o lo stesso numero di numeri delle altre righe
-                            # Quindi vado a mettere il numero nella riga che fin'ora ha ricevuto meno numeri.
-                            if cartella.caselle[row][indice_condizione] == 0 and condition_2: # Se quest'ultima condizione è vera e la posizione
-                                                                                              # non è già occupata da un altro numero
-                                cartella.caselle[row][indice_condizione] = n # inserisco il numero nella posizione
-                                contatore[row+2] += 1 # aggiorno il contatore
-                                break
-                    elif n == 90: # condizione specifica per il numero 90
-                        cartella.caselle[2][8] = n # che deve essere per forza messo nella casella in basso a destra della cartella
-                        contatore[2+2] += 1
-                        break
-                    
-                return contatore              
+        def posiziona_numero(contatore, cartella, n = int):
+            # Funzione che prende in ingresso:
+            # - un numero;
+            # - un oggetto di tipo cartella (matrice 3x9) in cui dovrò inserire il numero secondo determinate condizioni;
+            # - il contatore che mi serve per misurare quanti numeri ho messo in ogni riga della cartella;
+            # Restituisce il contatore aggiornato.
+            lista_condizioni = [n in range(0,10), n in range(10,20), n in range(20,30), n in range(30,40), n in range(40,50),
+                                n in range(50,60), n in range(60,70), n in range(70,80), n in range(80,90)] # Queste sono le 9 condizioni 
+                                                                                                            # relative alle 9 colonne della 
+                                                                                                            # cartella.
+            for condizione in lista_condizioni: # Scorro le 9 condizioni                 
+                if condizione: # Quando la condizione è soddisfatta allora procedo ad inserire il numero in quella colonna
+                    indice_condizione = lista_condizioni.index(condizione) # Prendo l'indice della condizione che corrisponde alla colonna 
+                                                                           # della cartella in cui dovrò inserire il numero
+                    for row in range(0,3): # Scorro le 3 righe della colonna
+                        condition_2 = contatore[row+1] >= contatore[row+2] <= contatore[row+3] and contatore[row] >= contatore[row+2] <= contatore[row+4]
+                        # Questa seconda condizione è vera se la riga che prendo in considerazione ha meno numeri o lo stesso numero di numeri delle altre righe
+                        # Quindi vado a mettere il numero nella riga che fin'ora ha ricevuto meno numeri.
+                        if cartella.caselle[row][indice_condizione] == 0 and condition_2: # Se quest'ultima condizione è vera e la posizione
+                                                                                          # non è già occupata da un altro numero
+                            cartella.caselle[row][indice_condizione] = n # inserisco il numero nella posizione
+                            contatore[row+2] += 1 # aggiorno il contatore
+                            break
+                elif n == 90: # condizione specifica per il numero 90
+                    cartella.caselle[2][8] = n # che deve essere per forza messo nella casella in basso a destra della cartella
+                    contatore[2+2] += 1
+                    break
+                
+            return contatore              
         
 
         list_of_element_per_row = [] # Variabile che mi serve a controllare che ogni cartella abbia ricevuto 5 numeri su ogni riga
         gruppo_cartelle = [] # Lista che conterrà le 6 cartelle
         for lista_di_numeri in numeri_cartelle: # Per ognuna delle 6 liste di numeri (che contengono 15 numeri)
-            #cartella = np.zeros((3, 9), int)
             cartella = Cartella() # Creo l'oggetto di tipo cartella
             element_per_row = [5, 5, 0, 0, 0, 5, 5]  # Variabile che uso come contatore per misurare (con i tre elementi centrali posti a zero) 
                                                      # quanti numeri andrò a mettere su ogni riga della cartella, gli altri elementi sono messi a 5 in modo
