@@ -14,7 +14,7 @@ class giocatore:
         self.cartelle = cartelle
         
     def get_giocatore(self):
-        # Metodo che restituisce il nome del giocatore e le sue cartelle
+        # Metodo che fa visualizzare il nome del giocatore e le sue cartelle
         print(f"{self.nome} {self.cartelle}")
         
     

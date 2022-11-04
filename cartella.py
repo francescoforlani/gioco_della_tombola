@@ -15,7 +15,7 @@ class Cartella:
         self.caselle = np.zeros((3, 9), dtype=int)
         
     def get_cartella(self):
-        # Metodo che restituisce la cartella.
+        # Metodo che fa visualizzare la cartella.
         print(self.caselle)
         
     def copri_numero(self, numero_estratto): 

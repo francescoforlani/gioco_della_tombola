@@ -18,6 +18,8 @@ class gruppo_di_cartelle:
         pass
         
     def crea_gruppo_cartelle(self):
+        # Metodo che restituisce una lista di 6 oggetti di tipo cartella (appunto un gruppo di cartelle)
+        
         # La creazione di 6 cartelle diverse avviene in 5 passaggi:
             
         # 1) Creo 9 intervalli, i numeri di ogni intervallo potranno essere messi all'interno
@@ -114,11 +116,14 @@ class gruppo_di_cartelle:
                 # porta problemi quando devo pescare un numero da loro. Quindi aggiungo delle quantità alla loro lunghezza in modo da 
                 # avere lunghezze tutte diverse. Esempio: [1, 4, 4, 3, 2, 2] --> [1.4, 4.9, 4.8, 3.7, 2.6, 2.5]
                 
-                max_index = lunghezza_intervalli.index(max_len) # prendo l'indice corrispondente alla unghezza massima
-                lunghezza_intervalli[max_index] = lunghezza_intervalli[max_index] + 0.9 
+                max_index = lunghezza_intervalli.index(max_len) # prendo l'indice corrispondente alla lunghezza massima
+                lunghezza_intervalli[max_index] = lunghezza_intervalli[max_index] + 0.9 # Aggiungo una quantità alla lunghezza massima
                 
-                second_max_index = lunghezza_intervalli.index(second_max_len)
-                lunghezza_intervalli[second_max_index] = lunghezza_intervalli[second_max_index] + 0.8
+                second_max_index = lunghezza_intervalli.index(second_max_len) # prendo l'indice corrispondente alla seconda lunghezza massima
+                lunghezza_intervalli[second_max_index] = lunghezza_intervalli[second_max_index] + 0.8 # Aggiungo una quantità alla seconda lunghezza massima 
+                                                                                                      # In questo modo, se la seconda lunghezza massima era in realtà 
+                                                                                                      # uguale alla prima, adesso non lo è più perchè gli ho aggiunto una
+                                                                                                      # quantità inferiore (0.8 invece che 0.9)
                 
                 third_max_index = lunghezza_intervalli.index(third_max_len)
                 lunghezza_intervalli[third_max_index] = lunghezza_intervalli[third_max_index] + 0.7
@@ -168,52 +173,41 @@ class gruppo_di_cartelle:
         # Inoltre, devo distribuirli in modo che ce ne siano 5 per riga. (Il vincolo 
         # "minimo 1 numero per colonna e massimo 3 numeri per colonna" è stato già rispettato
         # in quanto sono stati presi da 1 a 3 numeri per intervallo.)
-        # Dopo questo passaggio ottengo finalmente 6 cartelle rispettanti i vincoli dati.  
-
-
-        def posiziona_numero(contatore, cartella, n = int):
-            # Funzione che prende in ingresso:
-            # - un numero;
-            # - un oggetto di tipo cartella (matrice 3x9) in cui dovrò inserire il numero secondo determinate condizioni;
-            # - il contatore che mi serve per misurare quanti numeri ho messo in ogni riga della cartella;
-            # Restituisce il contatore aggiornato.
-            lista_condizioni = [n in range(0,10), n in range(10,20), n in range(20,30), n in range(30,40), n in range(40,50),
-                                n in range(50,60), n in range(60,70), n in range(70,80), n in range(80,90)] # Queste sono le 9 condizioni 
-                                                                                                            # relative alle 9 colonne della 
-                                                                                                            # cartella.
-            for condizione in lista_condizioni: # Scorro le 9 condizioni                 
-                if condizione: # Quando la condizione è soddisfatta allora procedo ad inserire il numero in quella colonna
-                    indice_condizione = lista_condizioni.index(condizione) # Prendo l'indice della condizione che corrisponde alla colonna 
-                                                                           # della cartella in cui dovrò inserire il numero
-                    for row in range(0,3): # Scorro le 3 righe della colonna
-                        condition_2 = contatore[row+1] >= contatore[row+2] <= contatore[row+3] and contatore[row] >= contatore[row+2] <= contatore[row+4]
-                        # Questa seconda condizione è vera se la riga che prendo in considerazione ha meno numeri o lo stesso numero di numeri delle altre righe
-                        # Quindi vado a mettere il numero nella riga che fin'ora ha ricevuto meno numeri.
-                        if cartella.caselle[row][indice_condizione] == 0 and condition_2: # Se quest'ultima condizione è vera e la posizione
-                                                                                          # non è già occupata da un altro numero
-                            cartella.caselle[row][indice_condizione] = n # inserisco il numero nella posizione
-                            contatore[row+2] += 1 # aggiorno il contatore
-                            break
-                elif n == 90: # condizione specifica per il numero 90
-                    cartella.caselle[2][8] = n # che deve essere per forza messo nella casella in basso a destra della cartella
-                    contatore[2+2] += 1
-                    break
-                
-            return contatore              
-        
+        # Dopo questo passaggio ottengo finalmente 6 cartelle rispettanti i vincoli dati.          
 
         list_of_element_per_row = [] # Variabile che mi serve a controllare che ogni cartella abbia ricevuto 5 numeri su ogni riga
         gruppo_cartelle = [] # Lista che conterrà le 6 cartelle
         for lista_di_numeri in numeri_cartelle: # Per ognuna delle 6 liste di numeri (che contengono 15 numeri)
             cartella = Cartella() # Creo l'oggetto di tipo cartella
-            element_per_row = [5, 5, 0, 0, 0, 5, 5]  # Variabile che uso come contatore per misurare (con i tre elementi centrali posti a zero) 
+            contatore = [5, 5, 0, 0, 0, 5, 5]  # Variabile che uso come contatore per misurare (con i tre elementi centrali posti a zero) 
                                                      # quanti numeri andrò a mettere su ogni riga della cartella, gli altri elementi sono messi a 5 in modo
                                                      # che poi la riga non prenda più di 5 numeri                                                                 
-            for numero in lista_di_numeri: # Per ogni numero all'interno della lista 
-                element_per_row = posiziona_numero(element_per_row, cartella, numero) # Vado a posizionare il numero in modo coerente alle specifiche
-                                
+            for numero in lista_di_numeri: # Per ogni numero all'interno della lista                                                                
+                lista_condizioni = [numero in range(0,10), numero in range(10,20), numero in range(20,30), numero in range(30,40), numero in range(40,50),
+                                    numero in range(50,60), numero in range(60,70), numero in range(70,80), numero in range(80,90)] # Queste sono le 9 condizioni 
+                                                                                                                # relative alle 9 colonne della 
+                                                                                                                # cartella.
+                for condizione in lista_condizioni: # Scorro le 9 condizioni                 
+                    if condizione: # Quando la condizione è soddisfatta allora procedo:
+                       indice_condizione = lista_condizioni.index(condizione) # Prendo l'indice della condizione che corrisponde alla colonna 
+                                                                               # della cartella in cui dovrò inserire il numero
+                       for row in range(0,3): # Scorro le 3 righe della colonna
+                           condition_2 = contatore[row+1] >= contatore[row+2] <= contatore[row+3] and contatore[row] >= contatore[row+2] <= contatore[row+4]
+                           # Questa seconda condizione è vera se la riga che prendo in considerazione ha meno numeri o lo stesso numero di numeri delle altre righe
+                           # Quindi vado a mettere il numero nella riga che fin'ora ha ricevuto meno numeri.
+                           if cartella.caselle[row][indice_condizione] == 0 and condition_2: # Se quest'ultima condizione è vera e la posizione
+                                                                                             # non è già occupata da un altro numero
+                               cartella.caselle[row][indice_condizione] = numero # inserisco il numero nella posizione
+                               contatore[row+2] += 1 # aggiorno il contatore
+                               break
                 
-            list_of_element_per_row.append(element_per_row) # lista di controllo che mi dice quanti numeri ho messo in ogni riga di ogni cartella
+                    elif numero == 90: # condizione specifica per il numero 90
+                        cartella.caselle[2][8] = numero # che deve essere per forza messo nella casella in basso a destra della cartella
+                        contatore[2+2] += 1
+                        break
+                
+                                                
+            list_of_element_per_row.append(contatore) # lista di controllo che mi dice quanti numeri ho messo in ogni riga di ogni cartella
                     
             gruppo_cartelle.append(cartella) # Aggiungo la cartella appena creata al gruppo di cartelle
                                 
