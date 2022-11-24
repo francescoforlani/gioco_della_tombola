@@ -71,11 +71,11 @@ while True:
     #aggiorna le cartelle dei giocatori
     lista_risultati_del_turno = []
     for giocatore in lista_giocatori:
-        for index in range(len(giocatore.cartelle)):
-            risultato = giocatore.cartelle[index].copri_numero(numero_estratto)
-            lista_risultati_del_turno.append(risultato)
-            if risultato != "niente":
-                print(f"{giocatore.nome} ha fatto {risultato} nella cartella {index+1}")
+        risultato = giocatore.controlla_risultato(numero_estratto)
+        lista_risultati_del_turno.append(risultato)
+        if risultato != "niente":
+            print(f"{giocatore.nome} ha fatto {risultato}")
+        
             
 
     # se qualcuno ha fatto tombola termina il gioco
