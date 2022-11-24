@@ -22,7 +22,8 @@ class gruppo_di_cartelle:
         
         # La creazione di 6 cartelle diverse avviene in 5 passaggi:
             
-        # 1) Creo 9 intervalli, i numeri di ogni intervallo potranno essere messi all'interno
+        # 1) Creazione strutture dati che mi serviranno per il resto del codice.
+        # Creo 9 intervalli, i numeri di ogni intervallo potranno essere messi all'interno
         # di una precisa colonna delle cartelle. Ad esempio i numeri dell'intervallo che
         # va da 1 a 9 potranno essere inseriti solo nella prima colonna delle cartelle.
         # C'è quindi una corrispondenza tra intervallo e colonna.
