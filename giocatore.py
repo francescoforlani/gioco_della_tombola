@@ -30,15 +30,15 @@ class giocatore:
                 self.lista_risultati.append(risultato)                
                 best_risultato = risultato            
                 if best_risultato == 2:
-                    risultato = f"ambo nella cartella numero {index+1}: {self.cartelle[index].caselle}"
+                    risultato = f"ambo nella cartella numero {index+1}:\n {self.cartelle[index].caselle}"
                 if best_risultato == 3:
-                    risultato = f"terna nella cartella numero {index+1}: {self.cartelle[index].caselle}"
+                    risultato = f"terna nella cartella numero {index+1}:\n {self.cartelle[index].caselle}"
                 if best_risultato == 4:
-                    risultato = f"quaterna nella cartella numero {index+1}: {self.cartelle[index].caselle}"
+                    risultato = f"quaterna nella cartella numero {index+1}:\n {self.cartelle[index].caselle}"
                 if best_risultato == 5:
-                    risultato = f"cinquina nella cartella numero {index+1}: {self.cartelle[index].caselle}"
+                    risultato = f"cinquina nella cartella numero {index+1}:\n {self.cartelle[index].caselle}"
                 if best_risultato == 6:
-                    risultato = f"tombola nella cartella numero {index+1}: {self.cartelle[index].caselle}"
+                    risultato = f"tombola nella cartella numero {index+1}:\n {self.cartelle[index].caselle}"
                 risultati_del_turno.append(risultato)
             else:
                 risultato = "niente"
