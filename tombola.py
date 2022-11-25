@@ -126,20 +126,18 @@ while True:
             sys.exit()
             
 #aggiorna le cartelle dei giocatori
-    lista_risultati_del_turno = []
 
     for giocatore in lista_giocatori:
-        risultato = giocatore.controlla_risultato(numero_estratto)
-        lista_risultati_del_turno.append(risultato)
-        if risultato != "niente":
-            print(f"{giocatore.nome} ha fatto {risultato}")
+        risultati_giocatore = giocatore.controlla_risultati(numero_estratto)
+        for risultato in risultati_giocatore:
+            if risultato != "niente":
+                print(f"{giocatore.nome} ha fatto {risultato}")
                 
 
             
 
     # se qualcuno ha fatto tombola termina il gioco
-            exist_count = lista_risultati_del_turno.count("tombola")
-            if exist_count > 0: 
+            if risultato.startswith('tombola'): 
                 print("")
                 print(f"E' stata fatta tombola da {giocatore.nome}")
                 sys.exit()
