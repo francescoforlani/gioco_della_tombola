@@ -1,11 +1,10 @@
 # -*- coding: utf-8 -*-
 """
 Created on Thu Sep 29 18:28:57 2022
-
-@author: Franc
+@author: Francesco & Orlando
 """
 
-import numpy as np
+
 import random
 import sys
 from cartella import Cartella
@@ -17,6 +16,8 @@ class gruppo_di_cartelle:
     def __init__(self):
         pass
         
+    
+    
     def crea_gruppo_cartelle(self):
         # Metodo che restituisce una lista di 6 oggetti di tipo cartella (appunto un gruppo di cartelle)
         

@@ -1,13 +1,7 @@
 # -*- coding: utf-8 -*-
 """
 Modificato on Thu Oct 25 12:15:54 2022
--Aggiunta  libreria Argparse con relativa richiesta. 
--Aggiunta variabile nel ciclo For, [104-115], per ottenere i risultati della tombola una singola volta
- e non per ogni giocatore.
--Eliminazione globals  
-
-@author: Orlando
-
+@author: Francesco & Orlando
 """
 
 
@@ -19,6 +13,7 @@ from giocatore import giocatore
 # from cartella import Cartella 
 from argparse import ArgumentParser
 from tabella import tabella 
+
 
 
 parser = ArgumentParser()
@@ -34,7 +29,16 @@ parser.add_argument('-f', '--nomi_giocatori',
                     action="store_true",
                     default=['primo','secondo','terzo'])
 
+pvincite = ['nullo', 'ambo', 'terna', 'quaterna', 'cinquina', 'tombola']
 
+
+
+def selezione_vincite(ris_new, ris_old):
+    
+    if pvincite.index(ris_new) > pvincite.index(ris_old):       
+        return True
+    else:
+        return False
 
 
 args = parser.parse_args()
@@ -83,67 +87,69 @@ busta = busta()
 # creazione oggetto tabellone
 tabellone=tabella()
 # niente_segno = 0
-segno = 0
 
 #Tabellone
-p = tabellone.valori_tab
 print('Tabellone:')
-print(f'{p}')
+print(tabellone.valori_tab)
+
 
 #inizia l'estrazione dei numeri e il controllo delle cartelle man mano che escono i numeri
+risultato_successivo= 'nullo'
+vincitore = ''
+giocatore = []
+giocotabb=0
 print("Iniziamo. Premi INVIO per estrarre un numero.")
 while True:
     input("")
     numero_estratto = busta.estraggo()
     print(f"il numero estratto è {numero_estratto}")
-# agg Tabellone
+    
+#aggiorno le vincite del tabellone
+    risTest = False
+    risultato = tabellone.aggiungi_numero(numero_estratto)
+    Test = selezione_vincite(risultato, risultato_successivo)
+    if Test:
+        risultato_successivo = risultato
+        vincitore = 'Il tabellone'
+        risTest = True
+        giocotabb=0
+          
+#aggiorno le vincite dei giocatori
 
-
-    tabellone.aggiungi_numero(numero_estratto)
-    sommrg = tabellone.sommanum_riga
-    sommct = tabellone.sommanum_cartella
-    b = tabellone.posizione_riga
-    g = tabellone.posizione_colonna
-    if sommrg == 2 and segno == 0:
-            print(f'Il tabellone ha fatto ambo alla riga:  {b+1}')
-            print(p[b])
-            segno += 1
-    elif sommrg == 3 and segno == 1:
-            print(f'Il tabellone ha fatto terno alla riga:  {b+1}')
-            print(p[b])
-            segno += 1
-    elif sommrg == 4 and segno == 2:
-            print(f'Il tabellone ha fatto quaterna alla riga:  {b+1}')
-            print(p[b])
-            segno += 1
-    elif sommrg == 5 and segno == 3:
-            print(f'Il tabellone ha fatto cinquina alla riga : {b+1}')
-            print(p[b])
-            segno += 1
-    elif sommct == 15 :
-            print(f'Il tabellone ha fatto Tombola nella cartella : {g+1}')
-            print(p[3*g:3*(g+1)])
-            sys.exit()
-            
-#aggiorna le cartelle dei giocatori
-    lista_risultati_del_turno = []
-
+    
     for giocatore in lista_giocatori:
         risultato = giocatore.controlla_risultato(numero_estratto)
-        lista_risultati_del_turno.append(risultato)
-        if risultato != "niente":
-            print(f"{giocatore.nome} ha fatto {risultato}")
-                
-
+        Test= selezione_vincite(risultato, risultato_successivo)
+        if Test:
+            risultato_successivo=risultato  
+            vincitore = f'Il giocatore {giocatore.nome}' 
+            risTest = True
+            giocotabb += 1
             
-
-    # se qualcuno ha fatto tombola termina il gioco
-            exist_count = lista_risultati_del_turno.count("tombola")
-            if exist_count > 0: 
-                print("")
-                print(f"E' stata fatta tombola da {giocatore.nome}")
-                sys.exit()
-        
+# rivela vincita
+         
+    if risultato_successivo == 'tombola':
+            print(f'------- {vincitore} ha fatto: {risultato_successivo} ')
+            print('Il gioco è terminato')           
+            if giocotabb > 0:
+              print('dovresti inserire qui la cartella')
+              sys.exit()
+            else:
+              print(f'nella cartella: {tabellone.stampa_cart}')
+              sys.exit()
+            
+    if risTest:
+            print()
+            print(f'-------- {vincitore} ha fatto: {risultato_successivo} ')
+            if giocotabb > 0:
+              print('dovrsti inserire qui la cartella')
+            else:
+              print(f'alla riga: {tabellone.stampa_riga}')
+              print(f'alla riga: {tabellone.stampa_zeri}')
+              
+            
+            
+            
     print("Premi INVIO per estrarre un nuovo numero.")
 
         
