@@ -13,6 +13,7 @@ Modificato on Thu Oct 25 12:15:54 2022
 
 import sys
 import random
+import math
 from busta import busta
 from gruppo_cartelle import gruppo_di_cartelle
 from giocatore import giocatore
@@ -57,8 +58,9 @@ if  numero_giocatori != len(numero_cartelle):
     print('Il numero di giocatori non corrisponde al numero di cartelle assegnate.')
     sys.exit()    
 
-
+numero_cartelle_totali = 0
 for i in range(len(numero_cartelle)):
+    numero_cartelle_totali = numero_cartelle_totali + numero_cartelle[i]
     if numero_cartelle[i] > 6:
         print(f"{numero_cartelle[i]} cartelle sono troppe, il massimo per ogni giocatore è 6.")
         sys.exit()
@@ -67,14 +69,20 @@ for i in range(len(numero_cartelle)):
 #assegna le cartelle richieste da ogni giocatore
 lista_giocatori = []
 
-    
+
+gruppo_cartelle = gruppo_di_cartelle() # Creo l'oggetto gruppo_cartelle
+cartelle_da_dividere = []
+numero_gruppi_cartelle = math.ceil(numero_cartelle_totali/6) # Trovo quanti gruppi di cartelle devo generare
+for i in range(numero_gruppi_cartelle):
+    singolo_gruppo = gruppo_cartelle.crea_gruppo_cartelle() # Genero le cartelle necessarie
+    for cartella in singolo_gruppo:
+        cartelle_da_dividere.append(cartella) # E preparo la lista con tutte le cartelle che andranno date ai giocatori
+        
 for i in range(len(nomi_giocatori)):
-    gruppo_cartelle = gruppo_di_cartelle()
-    lista_giocatori1 = ["giocatore_"+str(i+1)]
-    lista_giocatori1 = giocatore(f"{nomi_giocatori[i]}", 
-                                                 random.sample(gruppo_cartelle.crea_gruppo_cartelle(), 
-                                                               numero_cartelle[i]))
-    lista_giocatori.append(lista_giocatori1)
+    player = giocatore(f"{nomi_giocatori[i]}", random.sample(cartelle_da_dividere, numero_cartelle[i])) # Creo i giocatori
+                                                                                                        # con il loro nome
+                                                                                                        # e le loro cartelle
+    lista_giocatori.append(player) # Aggiungo i giocatori alla lista_giocatori
     print(f"Il giocatore {nomi_giocatori[i]} ha {numero_cartelle[i]} cartelle.")
     
     
