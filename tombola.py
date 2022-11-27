@@ -1,12 +1,19 @@
 # -*- coding: utf-8 -*-
 """
 Modificato on Thu Oct 25 12:15:54 2022
-@author: Francesco & Orlando
+-Aggiunta  libreria Argparse con relativa richiesta. 
+-Aggiunta variabile nel ciclo For, [104-115], per ottenere i risultati della tombola una singola volta
+ e non per ogni giocatore.
+-Eliminazione globals  
+
+@author: Orlando
+
 """
 
 
 import sys
 import random
+import math
 from busta import busta
 from gruppo_cartelle import gruppo_di_cartelle
 from giocatore import giocatore
@@ -15,19 +22,21 @@ from argparse import ArgumentParser
 from tabella import tabella 
 
 
-
 parser = ArgumentParser()
 
 parser.add_argument('-g', '--numero_giocatori',
                     help='Numero dei giocatori',
-                    type=int, default=3)
+                    type=int, default=10)
 parser.add_argument('-n', '--numero_cartelle',
                     help='numero carelle assegnate per giocatore',
-                    nargs='*', type=int, default=[3,2,1])
+                    nargs='*', type=int, default=[6,4,3,5,3,2,4,3,2,1])
 parser.add_argument('-f', '--nomi_giocatori',
                     help='nomi dei giocatori',
                     action="store_true",
-                    default=['primo','secondo','terzo'])
+                    default=['primo','secondo','terzo','quarto','quinto','sesto','sett','ott','nono','decim'])
+
+
+
 
 pvincite = ['nullo', 'ambo', 'terna', 'quaterna', 'cinquina', 'tombola']
 
@@ -61,8 +70,9 @@ if  numero_giocatori != len(numero_cartelle):
     print('Il numero di giocatori non corrisponde al numero di cartelle assegnate.')
     sys.exit()    
 
-
+numero_cartelle_totali = 0
 for i in range(len(numero_cartelle)):
+    numero_cartelle_totali = numero_cartelle_totali + numero_cartelle[i]
     if numero_cartelle[i] > 6:
         print(f"{numero_cartelle[i]} cartelle sono troppe, il massimo per ogni giocatore è 6.")
         sys.exit()
@@ -71,14 +81,20 @@ for i in range(len(numero_cartelle)):
 #assegna le cartelle richieste da ogni giocatore
 lista_giocatori = []
 
-    
+
+gruppo_cartelle = gruppo_di_cartelle() # Creo l'oggetto gruppo_cartelle
+cartelle_da_dividere = []
+numero_gruppi_cartelle = math.ceil(numero_cartelle_totali/6) # Trovo quanti gruppi di cartelle devo generare
+for i in range(numero_gruppi_cartelle):
+    singolo_gruppo = gruppo_cartelle.crea_gruppo_cartelle() # Genero le cartelle necessarie
+    for cartella in singolo_gruppo:
+        cartelle_da_dividere.append(cartella) # E preparo la lista con tutte le cartelle che andranno date ai giocatori
+        
 for i in range(len(nomi_giocatori)):
-    gruppo_cartelle = gruppo_di_cartelle()
-    lista_giocatori1 = ["giocatore_"+str(i+1)]
-    lista_giocatori1 = giocatore(f"{nomi_giocatori[i]}", 
-                                                 random.sample(gruppo_cartelle.crea_gruppo_cartelle(), 
-                                                               numero_cartelle[i]))
-    lista_giocatori.append(lista_giocatori1)
+    player = giocatore(f"{nomi_giocatori[i]}", random.sample(cartelle_da_dividere, numero_cartelle[i])) # Creo i giocatori
+                                                                                                        # con il loro nome
+                                                                                                        # e le loro cartelle
+    lista_giocatori.append(player) # Aggiungo i giocatori alla lista_giocatori
     print(f"Il giocatore {nomi_giocatori[i]} ha {numero_cartelle[i]} cartelle.")
     
     
@@ -86,18 +102,21 @@ for i in range(len(nomi_giocatori)):
 busta = busta()
 # creazione oggetto tabellone
 tabellone=tabella()
-# niente_segno = 0
+
 
 #Tabellone
+
+tabellone=tabella()
 print('Tabellone:')
 print(tabellone.valori_tab)
 
-
 #inizia l'estrazione dei numeri e il controllo delle cartelle man mano che escono i numeri
+
 risultato_successivo= 'nullo'
 vincitore = ''
 giocatore = []
 giocotabb=0
+
 print("Iniziamo. Premi INVIO per estrarre un numero.")
 while True:
     input("")
@@ -118,7 +137,7 @@ while True:
 
     
     for giocatore in lista_giocatori:
-        risultato = giocatore.controlla_risultato(numero_estratto)
+        risultato = giocatore.controlla_risultati(numero_estratto)
         Test= selezione_vincite(risultato, risultato_successivo)
         if Test:
             risultato_successivo=risultato  
@@ -130,19 +149,21 @@ while True:
          
     if risultato_successivo == 'tombola':
             print(f'------- {vincitore} ha fatto: {risultato_successivo} ')
-            print('Il gioco è terminato')           
             if giocotabb > 0:
-              print('dovresti inserire qui la cartella')
+              print(f'nella cartella numero {giocatore.stampa_cart}:\n {giocatore.stampa_cart1}')   
+              print('Il gioco è terminato')
               sys.exit()
             else:
-              print(f'nella cartella: {tabellone.stampa_cart}')
+              print('nella cartella:')
+              print(f'{tabellone.stampa_cart}')
+              print('Il gioco è terminato')
               sys.exit()
             
     if risTest:
-            print()
+            print('')
             print(f'-------- {vincitore} ha fatto: {risultato_successivo} ')
             if giocotabb > 0:
-              print('dovrsti inserire qui la cartella')
+               print(f'nella cartella numero {giocatore.stampa_cart}:\n {giocatore.stampa_cart1}')
             else:
               print(f'alla riga: {tabellone.stampa_riga}')
               print(f'alla riga: {tabellone.stampa_zeri}')
@@ -153,7 +174,4 @@ while True:
     print("Premi INVIO per estrarre un nuovo numero.")
 
         
-        
-        
-        
-
+       
