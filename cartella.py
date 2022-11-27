@@ -1,27 +1,22 @@
 # -*- coding: utf-8 -*-
 """
 Created on Fri Oct 21 14:22:04 2022
-@author: Francesco & Orlando
+
+@author: Franc
 """
 
 import numpy as np
 
 
-
 class Cartella:
-    
-    
-    
     
     def __init__(self):
         # La cartella è rappresentato da una matrice 3x9.
         self.caselle = np.zeros((3, 9), dtype=int)
         
-        
     def get_cartella(self):
         # Metodo che fa visualizzare la cartella.
         print(self.caselle)
-        
         
     def copri_numero(self, numero_estratto): 
         # Dato il numero estratto, verifico se ho vinto qualcosa (ambo, terna, quaterna, cinquina, tombola)
