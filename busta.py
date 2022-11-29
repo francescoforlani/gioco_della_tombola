@@ -2,7 +2,7 @@
 """
 Created on Thu Sep 29 15:01:37 2022
 
-@author: Franc
+@author: Francesco & Orlando
 """
 import random
 
