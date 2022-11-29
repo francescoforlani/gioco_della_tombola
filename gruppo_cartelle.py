@@ -2,10 +2,10 @@
 """
 Created on Thu Sep 29 18:28:57 2022
 
-@author: Franc
+@author: Francesco & Orlando
 """
 
-import numpy as np
+
 import random
 import sys
 from cartella import Cartella
