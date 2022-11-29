@@ -2,7 +2,7 @@
 """
 Created on Thu Sep 29 16:30:12 2022
 
-@author: Franc
+@author: Francesco & Orlando
 """
 
 
@@ -19,32 +19,35 @@ class giocatore:
         # Metodo che fa visualizzare il nome del giocatore e le sue cartelle
         print(f"{self.nome} {self.cartelle}")
         
+
     def controlla_risultati(self, numero_estratto):
         # Metodo che prende in ingresso il numero estratto, chiama il metodo copri_numero della classe cartella
         # e restituisce il risultato migliore del giocatore, se non l'ha ancora fatto.
+        # Sono state create 2 variabili che restituiscono il numero della cartella e la cartella nella qusle è stato 
+        # riscontrato il risultato migliore
+        
         best_risultato = max(self.lista_risultati)
+        risultati_del_turno = []
         for index in range(len(self.cartelle)):
-            self.stampa_cart = index+1
-            self.stampa_cart1 = self.cartelle[index].caselle
             risultato = self.cartelle[index].copri_numero(numero_estratto)
             if risultato > best_risultato:
-                self.lista_risultati.append(risultato)                
+                self.lista_risultati.append(risultato) 
+                self.numero_cart = index+1
+                self.array_cart = self.cartelle[index].caselle  
                 best_risultato = risultato            
                 if best_risultato == 2:
-                    risultato1 = "ambo"
+                    risultato = 'ambo'
                 if best_risultato == 3:
-                    risultato1 = "terna"
+                    risultato = 'terna'
                 if best_risultato == 4:
-                    risultato1 = "quaterna"
+                    risultato = 'quaterna'
                 if best_risultato == 5:
-                    risultato1 = "cinquina" 
+                    risultato = 'cinquina'
                 if best_risultato == 6:
-                    risultato1 = "tombola" 
+                    risultato = 'tombola'
+                risultati_del_turno.append(risultato)
             else:
-                 risultato1 = "nullo"
-
-        return risultato1
-
-# f"ambo nella cartella numero {index+1}:\n {self.cartelle[index].caselle}"
-        
-   
+                risultato = 'nullo'      
+        return risultati_del_turno
+            
+                
