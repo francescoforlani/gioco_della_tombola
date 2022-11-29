@@ -5,7 +5,7 @@
 Created on Fri Oct 21 14:22:04 2022
 
 
-@author: Orlando
+@author: Francesco & Orlando
 
 Il tabellone è creato con una matrice 18x5, in cui per ogni riga verranno assegnati 5 numeri da 1 a 90.
 """
