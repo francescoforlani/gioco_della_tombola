@@ -6,7 +6,7 @@ Modificato on Thu Oct 25 12:15:54 2022
  e non per ogni giocatore.
 -Eliminazione globals  
 
-@author: Orlando
+@author: Francesco & Orlando
 
 """
 
@@ -29,11 +29,11 @@ parser.add_argument('-g', '--numero_giocatori',
                     type=int, default=10)
 parser.add_argument('-n', '--numero_cartelle',
                     help='numero carelle assegnate per giocatore',
-                    nargs='*', type=int, default=[6,4,3,5,3,2,4,3,2,1])
+                    nargs='*', type=int, default=[6,6,6,6,6,6,6,6,6,6])
 parser.add_argument('-f', '--nomi_giocatori',
                     help='nomi dei giocatori',
                     action="store_true",
-                    default=['primo','secondo','terzo','quarto','quinto','sesto','sett','ott','nono','decim'])
+                    default=['primo','secondo','terzo','quarto','quinto','sesto','settimo','ottavo','nono','decimo'])
 
 
 
@@ -96,7 +96,7 @@ for i in range(len(nomi_giocatori)):
                                                                                                         # e le loro cartelle
     lista_giocatori.append(player) # Aggiungo i giocatori alla lista_giocatori
     print(f"Il giocatore {nomi_giocatori[i]} ha {numero_cartelle[i]} cartelle.")
-    
+
     
 #crea l'oggetto busta da cui estrarre i numeri
 busta = busta()
@@ -133,24 +133,30 @@ while True:
         risTest = True
         giocotabb=0
           
+        
 #aggiorno le vincite dei giocatori
 
     
     for giocatore in lista_giocatori:
-        risultato = giocatore.controlla_risultati(numero_estratto)
-        Test= selezione_vincite(risultato, risultato_successivo)
-        if Test:
-            risultato_successivo=risultato  
-            vincitore = f'Il giocatore {giocatore.nome}' 
-            risTest = True
-            giocotabb += 1
-            
+        risultati_giocatore = giocatore.controlla_risultati(numero_estratto)
+        for risultato in risultati_giocatore:
+            if risultato != 'nullo':
+                Test= selezione_vincite(risultato, risultato_successivo)
+                if Test:
+                    risultato_successivo=risultato  
+                    vincitore = f'Il giocatore {giocatore.nome}' 
+                    risTest = True
+                    giocotabb += 1
+                    ncart = giocatore.numero_cart
+                    cart = giocatore.array_cart
+                
+       
 # rivela vincita
          
     if risultato_successivo == 'tombola':
-            print(f'------- {vincitore} ha fatto: {risultato_successivo} ')
+            print(f'------- {vincitore} ha fatto {risultato_successivo} ')
             if giocotabb > 0:
-              print(f'nella cartella numero {giocatore.stampa_cart}:\n {giocatore.stampa_cart1}')   
+              print(f'nella cartella numero {ncart}:\n {cart}')   
               print('Il gioco è terminato')
               sys.exit()
             else:
@@ -161,9 +167,9 @@ while True:
             
     if risTest:
             print('')
-            print(f'-------- {vincitore} ha fatto: {risultato_successivo} ')
+            print(f'-------- {vincitore} ha fatto {risultato_successivo} ')
             if giocotabb > 0:
-               print(f'nella cartella numero {giocatore.stampa_cart}:\n {giocatore.stampa_cart1}')
+               print(f'nella cartella numero {ncart}:\n {cart}')
             else:
               print(f'alla riga: {tabellone.stampa_riga}')
               print(f'alla riga: {tabellone.stampa_zeri}')
