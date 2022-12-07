@@ -5,9 +5,7 @@ Modificato on Thu Oct 25 12:15:54 2022
 -Aggiunta variabile nel ciclo For, [104-115], per ottenere i risultati della tombola una singola volta
  e non per ogni giocatore.
 -Eliminazione globals  
-
 @author: Francesco & Orlando
-
 """
 
 
@@ -31,19 +29,20 @@ parser.add_argument('-n', '--numero_cartelle',
                     help='numero carelle assegnate per giocatore',
                     nargs='*', type=int, default=[6,6,6,6,6,6,6,6,6,6])
 parser.add_argument('-f', '--nomi_giocatori',
-                    help='nomi dei giocatori',
-                    action="store_true",
+                    nargs='+', help='nomi dei giocatori', 
                     default=['primo','secondo','terzo','quarto','quinto','sesto','settimo','ottavo','nono','decimo'])
 
 
 
 
-pvincite = ['nullo', 'ambo', 'terna', 'quaterna', 'cinquina', 'tombola']
+pvincite = ['nullo', 'ambo', 'terna', 'quaterna', 'cinquina', 'tombola'] # Lista che elenca i risultati con 
+                                                                         # importanza crescente
 
 
 
 def selezione_vincite(ris_new, ris_old):
-    
+    # questa funzione serve a confrontare il risultato precedente con quello successivo e restituisce true 
+    # se il nuovo risultato è migliore, altrimenti false.
     if pvincite.index(ris_new) > pvincite.index(ris_old):       
         return True
     else:
@@ -180,4 +179,7 @@ while True:
     print("Premi INVIO per estrarre un nuovo numero.")
 
         
-       
+        
+        
+        
+
